@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lot Size Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        light: '#f7fafc',
+                        dark: '#1a202c'
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         .dark-mode {
             background-color: #1a202c;
@@ -24,7 +36,7 @@
         }
     </style>
 </head>
-<body id="body" class="flex items-center justify-center min-h-screen bg-gray-100">
+<body id="body" class="flex items-center justify-center min-h-screen bg-gray-100 transition-colors duration-300">
     <div class="absolute top-4 right-4">
         <button onclick="toggleDarkMode()" class="bg-gray-700 text-white px-3 py-1 rounded">Toggle Night Mode</button>
     </div>
@@ -129,18 +141,23 @@
         }
 
         function toggleDarkMode() {
-            const body = document.body;
-            const isDark = body.classList.toggle("dark-mode");
-            localStorage.setItem("preferred-theme", isDark ? "dark" : "light");
-        }
+    const body = document.body;
+    const isDark = body.classList.toggle("dark-mode");
+    body.classList.toggle("bg-gray-100", !isDark);
+    body.classList.toggle("bg-gray-900", isDark);
+    localStorage.setItem("preferred-theme", isDark ? "dark" : "light");
+}
 
         window.onload = function () {
-            const saved = localStorage.getItem("preferred-theme");
-            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-            if (saved === "dark" || (!saved && prefersDark)) {
-                document.body.classList.add("dark-mode");
-            }
-        };
+    const saved = localStorage.getItem("preferred-theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const body = document.body;
+    if (saved === "dark" || (!saved && prefersDark)) {
+        body.classList.add("dark-mode");
+        body.classList.remove("bg-gray-100");
+        body.classList.add("bg-gray-900");
+    }
+};
     </script>
 </body>
 </html>
