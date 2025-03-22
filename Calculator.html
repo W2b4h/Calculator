@@ -16,8 +16,8 @@
             color: #edf2f7;
             border-color: #4a5568;
         }
-        .dark-mode .bg-white {
-            background-color: #2d3748;
+        .dark-mode .card {
+            background-color: #2d3748 !important;
         }
         .dark-mode .text-gray-500 {
             color: #a0aec0;
@@ -28,10 +28,9 @@
     <div class="absolute top-4 right-4">
         <button onclick="toggleDarkMode()" class="bg-gray-700 text-white px-3 py-1 rounded">Toggle Night Mode</button>
     </div>
-    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <div class="card bg-white p-6 rounded-lg shadow-lg w-96">
         <h2 class="text-xl font-bold text-center mb-4">Lot Size Calculator</h2>
         <!-- ... form remains unchanged ... -->
-
     </div>
 
     <script>
@@ -91,7 +90,6 @@
             localStorage.setItem("preferred-theme", isDark ? "dark" : "light");
         }
 
-        // Match system theme by default and apply saved preference if it exists
         window.onload = function () {
             const saved = localStorage.getItem("preferred-theme");
             const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
