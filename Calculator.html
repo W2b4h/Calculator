@@ -32,11 +32,16 @@
             </optgroup>
         </select>
 
-        <label class="block mb-2">Account Balance (optional):</label>
-        <input type="number" id="accountBalance" class="w-full p-2 border rounded mb-4" placeholder="$">
+        <div class="mb-4">
+            <label class="block mb-2">Account Balance (optional):</label>
+            <input type="number" id="accountBalance" class="w-full p-2 border rounded mb-2" placeholder="$">
 
-        <label class="block mb-2">Risk Percentage (optional):</label>
-        <input type="number" id="riskPercent" class="w-full p-2 border rounded mb-4" placeholder="%">
+            <label class="block mb-2">Risk Percentage (optional):</label>
+            <input type="number" id="riskPercent" class="w-full p-2 border rounded mb-2" placeholder="%">
+
+            <label class="block mb-2">Take Profit Distance (optional):</label>
+            <input type="number" id="takeProfit" class="w-full p-2 border rounded" placeholder="Points">
+        </div>
 
         <label class="block mb-2">Risk Amount (in dollars):</label>
         <input type="number" id="risk" class="w-full p-2 border rounded mb-4" placeholder="$">
@@ -44,9 +49,6 @@
         <label class="block mb-2">Stop Loss Distance (in points):</label>
         <input type="number" id="stopLoss" class="w-full p-2 border rounded mb-1" placeholder="Points">
         <p class="text-xs text-gray-500 mb-4">Note: Stop-loss should be in actual points (e.g. 14.9, not 149).</p>
-
-        <label class="block mb-2">Take Profit Distance (in points):</label>
-        <input type="number" id="takeProfit" class="w-full p-2 border rounded mb-4" placeholder="Points">
 
         <button onclick="calculateLotSize()" class="w-full bg-blue-500 text-white p-2 rounded">Calculate Lot Size</button>
 
