@@ -10,11 +10,13 @@
     <div class="bg-white p-6 rounded-lg shadow-lg w-96">
         <h2 class="text-xl font-bold text-center mb-4">Lot Size Calculator</h2>
         <label class="block mb-2">Select Asset:</label>
-        <select id="asset" class="w-full p-2 border rounded mb-4">
+        <select id="asset" class="w-full p-2 border rounded mb-4" onchange="updateUnit()">
             <optgroup label="Forex">
                 <option value="EURUSD">EURUSD</option>
                 <option value="GBPUSD">GBPUSD</option>
                 <option value="XAUUSD">XAUUSD</option>
+                <option value="USDCAD">USDCAD</option>
+                <option value="EURJPY">EURJPY</option>
             </optgroup>
             <optgroup label="Futures">
                 <option value="NQ1">NQ1</option>
@@ -29,27 +31,45 @@
                 <option value="ETHUSDT">ETHUSDT</option>
             </optgroup>
         </select>
+
+        <label class="block mb-2">Account Balance (optional):</label>
+        <input type="number" id="accountBalance" class="w-full p-2 border rounded mb-4" placeholder="$">
+
+        <label class="block mb-2">Risk Percentage (optional):</label>
+        <input type="number" id="riskPercent" class="w-full p-2 border rounded mb-4" placeholder="%">
+
         <label class="block mb-2">Risk Amount (in dollars):</label>
         <input type="number" id="risk" class="w-full p-2 border rounded mb-4" placeholder="$">
+
         <label class="block mb-2">Stop Loss Distance (in points):</label>
         <input type="number" id="stopLoss" class="w-full p-2 border rounded mb-4" placeholder="Points">
+
         <button onclick="calculateLotSize()" class="w-full bg-blue-500 text-white p-2 rounded">Calculate Lot Size</button>
-        <p class="mt-4 text-center font-bold">Calculated Lot Size: <span id="lotSize">0</span> lots</p>
+
+        <p class="mt-4 text-center font-bold">Calculated Size: <span id="lotSize">0</span> <span id="unit">lots</span></p>
+        <p class="mt-2 text-center">Position Size: <span id="positionSize">$0.00</span></p>
     </div>
 
     <script>
         function calculateLotSize() {
             let asset = document.getElementById("asset").value;
+            let accountBalance = parseFloat(document.getElementById("accountBalance").value);
+            let riskPercent = parseFloat(document.getElementById("riskPercent").value);
             let risk = parseFloat(document.getElementById("risk").value);
             let stopLoss = parseFloat(document.getElementById("stopLoss").value);
-            
+
+            if (!isNaN(accountBalance) && !isNaN(riskPercent)) {
+                risk = (accountBalance * riskPercent) / 100;
+                document.getElementById("risk").value = risk.toFixed(2);
+            }
+
             if (isNaN(risk) || isNaN(stopLoss) || risk <= 0 || stopLoss <= 0) {
                 alert("Please enter valid numbers for risk and stop loss distance.");
                 return;
             }
 
             let perPointValue = {
-                "EURUSD": 10, "GBPUSD": 10, "XAUUSD": 1, 
+                "EURUSD": 10, "GBPUSD": 10, "XAUUSD": 1, "USDCAD": 10, "EURJPY": 10,
                 "NQ1": 20, "MNQ1": 2, "ES1": 50, "MES1": 5, 
                 "US100": 20, "US500": 50,
                 "BTCUSDT": 1, "ETHUSDT": 1
@@ -57,6 +77,24 @@
 
             let lotSize = risk / (stopLoss * perPointValue[asset]);
             document.getElementById("lotSize").innerText = lotSize.toFixed(2);
+
+            let positionSize = lotSize * perPointValue[asset] * stopLoss;
+            document.getElementById("positionSize").innerText = "$" + positionSize.toFixed(2);
+
+            updateUnit();
+        }
+
+        function updateUnit() {
+            let asset = document.getElementById("asset").value;
+            let unit = "lots";
+
+            if (["NQ1", "MNQ1", "ES1", "MES1", "US100", "US500"].includes(asset)) {
+                unit = "contracts";
+            } else if (["BTCUSDT", "ETHUSDT"].includes(asset)) {
+                unit = "coins";
+            }
+
+            document.getElementById("unit").innerText = unit;
         }
     </script>
 </body>
