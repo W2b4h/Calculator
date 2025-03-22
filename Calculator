@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lot Size Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 class="text-xl font-bold text-center mb-4">Lot Size Calculator</h2>
+        <label class="block mb-2">Select Asset:</label>
+        <select id="asset" class="w-full p-2 border rounded mb-4">
+            <option value="EURUSD">EURUSD</option>
+            <option value="GBPUSD">GBPUSD</option>
+            <option value="XAUUSD">XAUUSD</option>
+            <option value="NQ1">NQ1</option>
+            <option value="MNQ1">MNQ1</option>
+            <option value="ES1">ES1</option>
+            <option value="MES1">MES1</option>
+            <option value="US100">US100</option>
+            <option value="US500">US500</option>
+        </select>
+        <label class="block mb-2">Risk Amount (in dollars):</label>
+        <input type="number" id="risk" class="w-full p-2 border rounded mb-4" placeholder="$">
+        <label class="block mb-2">Stop Loss Distance (in points):</label>
+        <input type="number" id="stopLoss" class="w-full p-2 border rounded mb-4" placeholder="Points">
+        <button onclick="calculateLotSize()" class="w-full bg-blue-500 text-white p-2 rounded">Calculate Lot Size</button>
+        <p class="mt-4 text-center font-bold">Calculated Lot Size: <span id="lotSize">0</span> lots</p>
+    </div>
+
+    <script>
+        function calculateLotSize() {
+            let asset = document.getElementById("asset").value;
+            let risk = parseFloat(document.getElementById("risk").value);
+            let stopLoss = parseFloat(document.getElementById("stopLoss").value);
+            
+            if (isNaN(risk) || isNaN(stopLoss) || risk <= 0 || stopLoss <= 0) {
+                alert("Please enter valid numbers for risk and stop loss distance.");
+                return;
+            }
+
+            let perPointValue = {
+                "EURUSD": 10, "GBPUSD": 10, "XAUUSD": 1, 
+                "NQ1": 20, "MNQ1": 2, "ES1": 50, "MES1": 5, 
+                "US100": 20, "US500": 50
+            };
+
+            let lotSize = risk / (stopLoss * perPointValue[asset]);
+            document.getElementById("lotSize").innerText = lotSize.toFixed(2);
+        }
+    </script>
+</body>
+</html>
